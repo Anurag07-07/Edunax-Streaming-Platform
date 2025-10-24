@@ -38,4 +38,4 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 ngrok http 3000 to start the localhost 
 
 Url to run the the project 
-ngrok http --url=questorial-zaiden-unheroical.ngrok-free.dev 3000
+ngrok http --url=hyperlogically-pseudoancestral-lemuel.ngrok-free.dev 3000

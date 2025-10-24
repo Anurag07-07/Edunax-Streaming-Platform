@@ -4,14 +4,15 @@
 // Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
-generator client {
-  provider = "prisma-client-js"
-}
-
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+generator client {
+  provider = "prisma-client-js"
+}
+
 
 model User{
   id String @id @default(uuid())  //This is the id that automatically created 
@@ -26,9 +27,35 @@ model User{
   blocking Block[] @relation("Blocking")
   blockedby Block[] @relation("BlockedBy")
 
+  stream Stream?
+
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model Stream{
+  id String @id @default(uuid())
+  name String @db.Text
+  thumbnailUrl String? @db.Text
+
+  ingressId String? @unique
+  serverUrl String? @db.Text
+  streamKey String? @db.Text
+
+  isLive Boolean @default(false)
+  isChatEnabled Boolean @default(true)
+  isChatDelayed Boolean @default(false)
+  isChatFollowersOnly Boolean @default(false)
+
+  userId String @unique
+  user User @relation(fields: [userId],references: [id],onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([ingressId])
 }
 
 model Follow{
@@ -59,3 +86,4 @@ model Block{
   @@index([blockedId])
   @@index([blockerId])
 }
+
