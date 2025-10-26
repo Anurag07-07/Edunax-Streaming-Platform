@@ -21,7 +21,7 @@ export const UrlCard = ({value}:UrlCardProps) => {
             placeholder='Server URL'
             >
             </Input>
-            <CopyButton></CopyButton>
+            <CopyButton value={value || ""}></CopyButton>
           </div>
         </div>
       </div>

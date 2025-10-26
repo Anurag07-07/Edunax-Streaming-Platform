@@ -18,7 +18,7 @@ export const CopyButton = ({value}:CopyButtonProps) => {
     }
 
     setIsCopied(true)
-
+    navigator.clipboard.writeText(value)
     setTimeout(()=>{
       setIsCopied(false)
     },1000)
