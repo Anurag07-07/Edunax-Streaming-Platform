@@ -10,11 +10,14 @@ import { usePathname } from "next/navigation"
 interface UserItemProps{
   username:string
   imageUrl:string
-  isLive:boolean
+  isLive:boolean | undefined
 }
 export const UserItem = ({username,imageUrl,isLive}:UserItemProps) => {
   const pathname = usePathname()
   const {collapsed} = useSidebar()
+
+  console.log(isLive);
+  
 
   const href = `/${username}`
 
@@ -48,7 +51,6 @@ export const UserItem = ({username,imageUrl,isLive}:UserItemProps) => {
     </Button>
   )
 }
-
 
 export const UserItemSkeleton = ()=>{
   return (
