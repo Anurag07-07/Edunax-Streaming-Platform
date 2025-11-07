@@ -1,6 +1,5 @@
 import { currentUser } from "@clerk/nextjs/server"
 import { db } from "./db"
-import { executionAsyncId } from "async_hooks"
 
 export const getSelf = async()=>{
   const self = await currentUser()

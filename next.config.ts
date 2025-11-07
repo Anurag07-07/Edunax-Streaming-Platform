@@ -2,6 +2,14 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
+  images: {
+    remotePatterns: [
+      { protocol: 'https', hostname: 'utfs.io' },
+      { protocol: 'https', hostname: 'res.cloudinary.com' },
+      { protocol: 'https', hostname: 'example-bucket.s3.amazonaws.com' },
+    ],
+  },
+
 
   webpack: (config, { isServer, webpack }) => {
     config.module.rules.push({
