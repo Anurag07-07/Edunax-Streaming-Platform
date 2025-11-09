@@ -30,7 +30,7 @@
     "clsx": "^2.1.1",
     "crypto": "^1.0.1",
     "crypto-browserify": "^3.12.1",
-    "date-fns": "^4.1.0",
+    "date-fns": "^2.30.0",
     "jwt-decode": "^4.0.0",
     "livekit-client": "^2.15.13",
     "livekit-server-sdk": "^2.14.0",
