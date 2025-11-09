@@ -1,3 +1,4 @@
+import { resetIngress } from "@/actions/ingress";
 import { db } from "@/lib/db";
 import { verifyWebhook } from "@clerk/nextjs/webhooks";
 import { NextRequest } from "next/server";
@@ -49,6 +50,7 @@ export async function POST(request: NextRequest) {
     }
 
     if(eventType==='user.deleted'){
+      await resetIngress(id!)
       await db.user.delete({
         where:{
           externalUserId:id!
