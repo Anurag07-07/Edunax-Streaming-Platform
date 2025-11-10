@@ -48,14 +48,14 @@ export const getFollowedUsers = async()=>{
   }
 }
 
-
 export const isFollowing = async (id: string): Promise<boolean> => {
   try {
     // Get the currently authenticated user
     const self = await getSelf();
 
-    if (self instanceof Error) {
-      throw new Error("Could not retrieve user information.");
+    if (self instanceof Error || !self) {
+      // If there's no authenticated user, they're not following anyone
+      return false;
     }
 
     // Get the other user from the database

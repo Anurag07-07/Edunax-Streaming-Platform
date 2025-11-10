@@ -9,7 +9,10 @@ export const isBlockedByUser = async (id: string) => {
   try {
     // Get the currently logged-in user's information
     const self = await getSelf()
-    if (!self || self instanceof Error) throw new Error("Could not retrieve current user")
+    if (!self || self instanceof Error) {
+      // If there's no authenticated user, they're a guest - return false
+      return false
+    }
 
     // Find the other user by their id
     const otherUser = await db.user.findUnique({ where: { id } })

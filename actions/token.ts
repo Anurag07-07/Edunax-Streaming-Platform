@@ -15,45 +15,46 @@ const LIVEKIT_API_SECRET = process.env.LIVEKIT_API_SECRET!
 export const createViewerToken = async(hostIdentity:string)=>{
   let self;
   try {
-    self = await getSelf()
-  } catch (error) {
+    self = await getSelf();
+  } catch {
+    // Create a guest user if not authenticated
     const id = v4();
     const username = `guest#${Math.floor(Math.random()*1000)}`;
-    self = {id,username}
+    self = { id, username };
   }
 
-  const host = await getUserById(hostIdentity)
+  const host = await getUserById(hostIdentity);
 
   if (!host) {
-    throw new Error(`User not found`)
+    throw new Error(`User not found`);
   }
 
-  const isBlocked = await isBlockedByUser(host.id)
+  const isBlocked = await isBlockedByUser(host.id);
 
   if (isBlocked) {
-    throw new Error(`User is blocked`)
+    throw new Error(`User is blocked`);
   }
 
-  if (self instanceof Error) {
-    throw new Error(`User is not validated`)
-  }
-  const isHost = self.id == host.id
+  // Handle both authenticated users and guests
+  const userId = self instanceof Error ? v4() : self.id;
+  const username = self instanceof Error ? `guest#${Math.floor(Math.random()*1000)}` : self.username;
+  const isHost = !self || self instanceof Error ? false : self.id === host.id;
 
   const token = new AccessToken(
     LIVEKIT_API_KEY,
     LIVEKIT_API_SECRET,
     {
-      identity: isHost ? `host-${self.id}` : self.id,
-      name:self.username
+      identity: isHost ? `host-${userId}` : userId,
+      name: username
     }
   );
 
-  token.addGrant({
-    room:host.id,
-    roomJoin:true,
-    canPublish:false,
-    canPublishData:true
-  })
+  token.addGrant({ 
+    room: hostIdentity,
+    roomJoin: true,
+    canPublish: false,
+    canSubscribe: true,
+  });
 
-  return await Promise.resolve(token.toJwt())
+  return token.toJwt();
 }
