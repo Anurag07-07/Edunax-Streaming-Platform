@@ -4,11 +4,11 @@ import { currentUser } from '@clerk/nextjs/server';
 import React from 'react';
 
 interface CreatorPageProps {
-  params: { username: string }; // ✅ Correct: no Promise
+  params: Promise<{ username: string }>;
 }
 
 const CreatorPage = async ({ params }: CreatorPageProps) => {
-  const { username } = params; // ✅ No await here
+  const { username } = await params;
 
   const externalUser = await currentUser();
   const user = await getUserByUsername(username);

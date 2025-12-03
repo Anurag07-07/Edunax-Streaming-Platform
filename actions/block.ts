@@ -6,7 +6,8 @@ import { RoomServiceClient } from "livekit-server-sdk"
 import { revalidatePath } from "next/cache"
 
 /**
- * 🚫 Handles blocking a user.
+ * 
+ * Handles blocking a user.
  * 
  * 1. Calls the BlockUser service to create a block record.
  * 2. Revalidates relevant pages to reflect the change.
