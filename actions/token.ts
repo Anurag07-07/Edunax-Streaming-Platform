@@ -36,9 +36,9 @@ export const createViewerToken = async(hostIdentity:string)=>{
   }
 
   // Handle both authenticated users and guests
-  const userId = self instanceof Error ? v4() : self.id;
+  const userId = self instanceof Error ? v4() : self.externalUserId;
   const username = self instanceof Error ? `guest#${Math.floor(Math.random()*1000)}` : self.username;
-  const isHost = !self || self instanceof Error ? false : self.id === host.id;
+  const isHost = !self || self instanceof Error ? false : self.externalUserId === host.externalUserId;
 
   const token = new AccessToken(
     LIVEKIT_API_KEY,
