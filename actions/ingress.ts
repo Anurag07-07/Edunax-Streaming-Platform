@@ -1,4 +1,4 @@
-'use server'
+"use server"
 
 import {
   IngressAudioEncodingPreset,
@@ -28,9 +28,9 @@ const roomService = new RoomServiceClient(
 
 const ingressClient = new IngressClient(LIVEKIT_API_URL)
 
-export const resetIngress = async([hostIdentity]:string)=>{
+export const resetIngress = async (hostIdentity: string) => {
   const ingresses = await ingressClient.listIngress({
-    roomName:hostIdentity
+    roomName: hostIdentity,
   })
 
   const rooms = await roomService.listRooms([hostIdentity])
@@ -40,7 +40,9 @@ export const resetIngress = async([hostIdentity]:string)=>{
   }
 
   for (const ingress of ingresses) {
-    await ingressClient.deleteIngress(ingress.ingressId)
+    if (ingress.ingressId) {
+      await ingressClient.deleteIngress(ingress.ingressId)
+    }
   }
 }
 export const createIngress = async (ingressType: IngressInput) => {
@@ -50,14 +52,13 @@ export const createIngress = async (ingressType: IngressInput) => {
     throw new Error(`Could not retrieve current user`)
   }
 
-  await resetIngress(self.id)
+  await resetIngress(self.externalUserId)
 
-  // Todo: reset previous ingress if needed
   const options: CreateIngressOptions = {
     name: self.username,
-    roomName: self.id,
+    roomName: self.externalUserId,
     participantName: self.username,
-    participantIdentity: self.id,
+    participantIdentity: self.externalUserId,
   }
 
   if (ingressType === IngressInput.WHIP_INPUT) {
@@ -87,7 +88,7 @@ export const createIngress = async (ingressType: IngressInput) => {
 
   await db.stream.update({
     where: {
-      userId: self.id,
+      userId: self.id, // DB primary key (uuid) — correct here
     },
     data: {
       ingressId: ingress.ingressId,
